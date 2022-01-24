@@ -20,7 +20,7 @@
 			<input type='text' v-model='email' placeholder="E-mail">
 			
 			<input type='button' @click='recordsearch()' value='Abschicken'>
-
+			<input type='button' @click='load_lastfilter()' value='Filter laden'>
 			<br> test {{speicher}} <br>
 						<!-- List records -->
 
@@ -67,23 +67,20 @@
 						});
 					},
 					
-					recordsearch_bylastfilter: function(){
-						if(this.username != "" || this.name != "" || this.email != "" ){
+					load_lastfilter: function(){
 							app.speicher = this.name;
 							axios.get('ajaxfile.php', {
 							    params: {
-									load:"",
-																
+									load:this.load,		
 							    }	
 							})
 						  	.then(function (response) {
-						    	app.users = response.data;
-								
+						    	app.speicher = response.data;
 						  	})
 						  	.catch(function (error) {
 						    	console.log(error);
 						  	});
-						}},
+						},
 
 
 					recordsearch: function(){
@@ -97,8 +94,7 @@
 							    }	
 							})
 						  	.then(function (response) {
-						    	app.users = response.data;
-								
+						    	app.users = response.data;					
 						  	})
 						  	.catch(function (error) {
 						    	console.log(error);
