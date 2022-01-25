@@ -17,7 +17,7 @@
 			<input type='text' v-model='username' placeholder="Login">
 			<input type='text' v-model='name' placeholder="Vollständiger Name">
 			<input type='text' v-model='email' placeholder="E-mail">
-			
+			<!-- Buutons für Bedingung -->
 			<input type='button' @click='recordsearch()' value='Abschicken'>
 			<input type='button' @click='load_lastfilter()' value='Filter laden'>
 			<input type='button' @click='clear()' value='clear'>
@@ -30,7 +30,7 @@
 					<th>Name</th>
 					<th>Email</th>
 				</tr>
-
+				<!-- Durchlauf des array user welches durch die Methoden allRecords() und recordsearch() aus der DB abgerufen wird -->
 				<tr v-for='user in users'>
 					<td>{{ user.username }}</td>
 					<td>{{ user.name }}</td>
@@ -55,6 +55,7 @@
 					load:""
 				},				
 				methods: {
+					//all Datensätze abrufen
 					allRecords: function(){
 						
 						axios.get('get_database.php')
@@ -66,10 +67,10 @@
 						    console.log(error);
 						});
 					},
+// Letzer Filter aus CSV Datei laden 
 					load_lastfilter: function(){	
 							axios.get('loadfilter.php', {
-							    params: {
-										
+							    params: {		
 							    }	
 							})
 						  	.then(function (response) {
@@ -81,12 +82,14 @@
 						    	console.log(error);
 						  	});
 						},
+						//Neue Suche beginnen 
 					clear: function(){
 						this.username ="";
 						this.name ="";
 						this.email ="";
 						app.users = "";
 					},
+					//Suche Starten wenn alle Felder nicht leer sind sonst Tabelle = "" setzen 
 					recordsearch: function(){
 						
 						if(this.username != "" || this.name != "" || this.email != "" ){
