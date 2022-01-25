@@ -10,9 +10,8 @@
 	</head>
 	<body>
 		<div id='myapp'>
-			
 			<!-- Select All records -->
-			<input type='button' @click='allRecords()' value='Select All users'>
+			<input type='button' @click='allRecords()'@keyup.enter="enterClicked()" value='Select All users'>
 			<br><br>
 			<!-- Eingabe Suche  -->
 			<input type='text' v-model='username' placeholder="Login">
@@ -21,6 +20,7 @@
 			
 			<input type='button' @click='recordsearch()' value='Abschicken'>
 			<input type='button' @click='load_lastfilter()' value='Filter laden'>
+			<input type='button' @click='clear()' value='clear'>
 			<br> test {{speicher}} <br>
 						<!-- List records -->
 
@@ -57,7 +57,7 @@
 				methods: {
 					allRecords: function(){
 						
-						axios.get('ajaxfile.php')
+						axios.get('get_database.php')
 						.then(function (response) {
 						    app.users = response.data;
 							
@@ -66,27 +66,31 @@
 						    console.log(error);
 						});
 					},
-					
-					load_lastfilter: function(){
-							app.speicher = this.name;
-							axios.get('ajaxfile.php', {
+					load_lastfilter: function(){	
+							axios.get('loadfilter.php', {
 							    params: {
-									load:this.load,		
+										
 							    }	
 							})
 						  	.then(function (response) {
-						    	app.speicher = response.data;
+						    	app.username = response.data[0][0];
+								app.name = response.data[0][1];
+								app.email = response.data[0][2];
 						  	})
 						  	.catch(function (error) {
 						    	console.log(error);
 						  	});
 						},
-
-
+					clear: function(){
+						this.username ="";
+						this.name ="";
+						this.email ="";
+						app.users = "";
+					},
 					recordsearch: function(){
+						
 						if(this.username != "" || this.name != "" || this.email != "" ){
-							app.speicher = this.name;
-							axios.get('ajaxfile.php', {
+							axios.get('get_database.php', {
 							    params: {
 									username:this.username,
 									name:this.name,
@@ -100,13 +104,14 @@
 						    	console.log(error);
 						  	});
 						}
+						else
+						{
+							app.users = "";	
+						}
 						
 					}
 				}
 			})
-
-
-
 
 		</script>
 		
