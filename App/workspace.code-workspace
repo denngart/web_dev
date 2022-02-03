@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"name": "webproject @ main",
+			"uri": "gitlens://main/d:/Docker/webproject?{\"path\":\"/d:/Docker/webproject\",\"ref\":\"main\",\"repoPath\":\"d:/Docker/webproject\"}"
+		}
+	],
+	"settings": {}
+}

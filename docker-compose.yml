@@ -3,15 +3,21 @@ services:
   phpfpm:
     container_name: phpfpm
     image: nanoninja/php-fpm
+    #build: .
     ports:
       - 3000:3000
+    env_file:
+      - ".env"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
       - ./App:/var/www/html
     command: php -S="0.0.0.0:3000" -t="/var/www/html"
     depends_on:
       - mysql
     networks:
-     - wv-net
+     - net1
 
   mysql:
     container_name: mysql
@@ -30,6 +36,6 @@ services:
     volumes:
       - ./data/mysql:/var/lib/mysql
     networks:
-     - wv-net
+     - net1
 networks:
-  wv-net:
+  net1:
