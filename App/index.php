@@ -2,11 +2,14 @@
 <html>
 	<head>
 		<title>Fetch records from MySQL Database with Vue.js and PHP</title>
-
-
 		<script src="https://unpkg.com/vuejs-datepicker"></script>
 		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
         <script src='https://unpkg.com/axios/dist/axios.min.js'></script>
+		<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 	</head>
 	<body>
 		<div id='myapp'>
@@ -17,28 +20,33 @@
 			<input type='text' v-model='username' placeholder="Login">
 			<input type='text' v-model='name' placeholder="Vollständiger Name">
 			<input type='text' v-model='email' placeholder="E-mail">
-			<!-- Buutons für Bedingung -->
-			<input type='button' @click='recordsearch()' value='Abschicken'>
-			<input type='button' @click='load_lastfilter()' value='Filter laden'>
-			<input type='button' @click='clear()' value='clear'>
-			<br> test {{speicher}} <br>
+			<!-- Butons für Bedingung -->
+			<input type='submit' class="glyphicon glyphicon-search" @click='recordsearch()' value='Suche'>
+			<input type='button' class="btn btn-info" @click='load_lastfilter()' value='Filter laden'>
+			<input type='button' class="btn btn-info" @click='clear()' value='clear'>
+			<br>   <br>
 						<!-- List records -->
 
-			<table border='1' width='80%' style='border-collapse: collapse;'>
-				<tr>
-					<th>Username</th>
-					<th>Name</th>
-					<th>Email</th>
+			<table class="table table-striped">
+			<thead>
+				<tr>		
+					<th @click="sort('username')">Username</th>
+					<th @click="sort('name')">Name</th>
+					<th @click="sort('email')">Email</th>
 				</tr>
+				</thead>
 				<!-- Durchlauf des array user welches durch die Methoden allRecords() und recordsearch() aus der DB abgerufen wird -->
-				<tr v-for='user in users'>
+				<tbody>
+			
+				<tr v-for='user in sortedUser'>
 					<td>{{ user.username }}</td>
 					<td>{{ user.name }}</td>
 					<td>{{ user.email }}</td>
 					
 				</tr>
+				
 			</table>
-			
+			debug: sort={{currentSort}}, dir={{currentSortDir}}
 		</div>
 		<!-- Script -->
 		<script>
@@ -46,16 +54,27 @@
 				el: '#myapp',
 				
 				data: {
-					users: "",
+					users:[],
 					userid: "",
 					username: "",
 					name:"",
 					email:"",
 					speicher:"",
-					load:""
+					load:"",
+					currentSort:'name',
+					currentSortDir:'asc'
 				},				
 				methods: {
 					//all Datensätze abrufen
+
+					sort:function(s) {
+						//if s == current sort, reverse
+						if(s === this.currentSort) {
+						  this.currentSortDir = this.currentSortDir==='asc'?'desc':'asc';
+						}
+						this.currentSort = s;
+					  }
+					,
 					allRecords: function(){
 						
 						axios.get('get_database.php')
@@ -87,7 +106,7 @@
 						this.username ="";
 						this.name ="";
 						this.email ="";
-						app.users = "";
+						app.users = [];
 					},
 					//Suche Starten wenn alle Felder nicht leer sind sonst Tabelle = "" setzen 
 					recordsearch: function(){
@@ -109,12 +128,24 @@
 						}
 						else
 						{
-							app.users = "";	
+							app.users = [];	
 						}
 						
 					}
-				}
-			})
+				},
+					computed:{
+						sortedUser:function() {
+						  return this.users.sort((a,b) => {
+							let modifier = 1;
+							if(this.currentSortDir === 'desc') modifier = -1;
+							if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+							if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+							return 0;
+						  });
+						}
+					  }
+				})
+			
 
 		</script>
 		
