@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 	<head>
-		<title>Fetch records from MySQL Database with Vue.js and PHP</title>
+		<title>Benutzerdatenbank der WebPizza e.K. </title>
 		<script src="https://unpkg.com/vuejs-datepicker"></script>
 		<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
         <script src='https://unpkg.com/axios/dist/axios.min.js'></script>
@@ -9,20 +9,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 
-
 	</head>
 	<body>
-		 
 		<div id='myapp'>
 			<!-- Select All records -->
-			<input type='button' @click='allRecords()'@keyup.enter="enterClicked()" value='Select All users'>
+			<input type='button' @click='allRecords()' value='Select All users'>
 			<br><br>
 			<!-- Eingabe Suche  -->
 			<input type='text' v-model='username' placeholder="Login">
 			<input type='text' v-model='name' placeholder="Vollständiger Name">
 			<input type='text' v-model='email' placeholder="E-mail">
 			<!-- Butons für Bedingung -->
-			<input type='submit' class="glyphicon glyphicon-search" @click='recordsearch()' value='Suche'>
+			<input type='button' class="btn btn-info b " @click='recordsearch()' value='Suche'>
 			<input type='button' class="btn btn-info" @click='load_lastfilter()' value='Filter laden'>
 			<input type='button' class="btn btn-info" @click='clear()' value='clear'>
 			<br>   <br>
@@ -47,7 +45,7 @@
 				</tr>
 				
 			</table>
-			debug: sort={{currentSort}}, dir={{currentSortDir}}
+		<!--	debug: sort={{currentSort}}, dir={{currentSortDir}} -->
 		</div>
 		<!-- Script -->
 		<script src="app.js"></script>
